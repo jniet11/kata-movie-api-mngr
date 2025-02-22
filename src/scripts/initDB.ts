@@ -5,12 +5,11 @@ export const initDB = async () => {
     CREATE DATABASE IF NOT EXISTS \`database-kata\`;
   `);
 
-  // Crear tablas directamente en 'database-kata' sin usar USE
   await executeQuery(`
     CREATE TABLE IF NOT EXISTS \`database-kata\`.movies (
       id INT AUTO_INCREMENT PRIMARY KEY,
       title VARCHAR(255) NOT NULL,
-      genre VARCHAR(100) NOT NULL,
+      gender VARCHAR(100) NOT NULL,
       duration INT NOT NULL,
       classification VARCHAR(50) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

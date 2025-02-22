@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "tsc; node dist/server.js",
+    "start": "tsc; node dist/server.js  -p 3000",
     "dev": "ts-node-dev --esm src/server.ts"
   },
   "dependencies": {
