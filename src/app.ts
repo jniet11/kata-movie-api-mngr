@@ -17,6 +17,6 @@ app.get('/', (req: Request, res: Response) => {
   res.send('API funcionando correctamente 🚀');
 });
 
-app.use('/movie', movieRoutes);
+app.use('/cinema', movieRoutes);
 
 export default app;

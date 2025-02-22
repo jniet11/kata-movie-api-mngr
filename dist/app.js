@@ -12,5 +12,5 @@ app.use(express.json()); // Parsea JSON en las solicitudes
 app.get('/', (req, res) => {
     res.send('API funcionando correctamente 🚀');
 });
-app.use('/movie', movieRoutes);
+app.use('/cinema', movieRoutes);
 export default app;
