@@ -1,13 +1,23 @@
 import { Router } from 'express';
-import { registerMovie } from '../controllers/movieController.js';
-import { registerRoom } from '../controllers/roomController.js';
-import { reserveChair } from '../controllers/reservationController.js';
+import { registerMovie, getMovies, updateMovie, deleteMovie } from '../controllers/movieController.js';
+import { registerRoom, getRooms, updateRoom, deleteRoom} from '../controllers/roomController.js';
+import { createReservation } from '../controllers/reservationController.js';
 
 const router = Router();
 
 router.post('/register-movie', registerMovie);
+router.post('/get-movies', getMovies);
+router.post('/update-movie', updateMovie);
+router.post('/delete-movie', deleteMovie);
+
 router.post('/register-room', registerRoom);
-router.post('/reservation', reserveChair);
+router.post('/get-rooms', getRooms);
+router.post('/update-room', updateRoom);
+router.post('/delete-room', deleteRoom);
+
+
+router.post('/reservation', createReservation);
+
 router.post('/view-cinema')
 
 export default router;
