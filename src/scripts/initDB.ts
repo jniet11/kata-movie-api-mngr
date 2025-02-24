@@ -32,6 +32,9 @@ export const initDB = async () => {
       room_id INT NOT NULL,
       show_time DATETIME NOT NULL,
       seats TEXT NOT NULL,
+      email VARCHAR(100) NOT NULL,
+      customer_name VARCHAR(50) NOT NULL,
+      doc_number VARCHAR(12) NOT NULL,
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (movie_id) REFERENCES \`database-kata\`.movies(id),
       FOREIGN KEY (room_id) REFERENCES \`database-kata\`.rooms(id)
