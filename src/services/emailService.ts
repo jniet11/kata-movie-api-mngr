@@ -18,11 +18,20 @@ export const sendEmail = async (
     },
   });
 
+  const correctDate = new Date(date);
+  const textDate = correctDate.toLocaleString("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   const mailOptions = {
     from: '"Cinema Kata" <jsebastiannieto1716@gmail.com>',
     to: email,
     subject: "Tu reserva en Cinema Kata 🎥😁",
-    text: `Gracias ${customer_name} por reservar en Cinema Kata, todo listo para que veas ${movie}, en la sala ${room}, en los asientos ${seats} el ${date}`,
+    text: `Gracias ${customer_name} por reservar en Cinema Kata, todo listo para que veas ${movie}, en la sala ${room}, en los asientos ${seats} el ${textDate}`,
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
