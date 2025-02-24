@@ -14,21 +14,21 @@ const sslOptions = {
 };
 
 const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: "database-kata",
-    waitForConnections: true,
-    connectionLimit: 10,
-    ssl: sslOptions,
-    typeCast: (field, next) => {
-      if (field.type === "TINY" && field.length === 1) {
-        return field.string() === "1";
-      }
-      return next();
-    },
-  });
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: "database-kata",
+  waitForConnections: true,
+  connectionLimit: 10,
+  ssl: sslOptions,
+  typeCast: (field, next) => {
+    if (field.type === "TINY" && field.length === 1) {
+      return field.string() === "1";
+    }
+    return next();
+  },
+});
 
 export interface QueryResult {
   results: RowDataPacket[] | ResultSetHeader;

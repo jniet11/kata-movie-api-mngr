@@ -1,18 +1,33 @@
-// controllers/reservationController.ts
 import { Request, Response } from "express";
 import { executeQuery } from "../config/db.js";
 import { sendEmail } from "../services/emailService.js";
 
-// Crear reserva
 export const createReservation = async (req: Request, res: Response) => {
-  const { email, movie_id, room_id, show_time, seats } = req.body;
+  const {
+    movie_id,
+    room_id,
+    show_time,
+    seats,
+    email,
+    customer_name,
+    doc_number,
+  } = req.body;
   try {
-    console.log('El correo ingresado es: ', email);
+    console.log(req.body);
+    console.log("El correo ingresado es: ", email);
     const result = await executeQuery(
       `INSERT INTO \`database-kata\`.reservations
-      (movie_id, room_id, show_time, seats)
-      VALUES (?, ?, ?, ?)`,
-      [movie_id, room_id, new Date(show_time), JSON.stringify(seats)]
+      (movie_id, room_id, show_time, seats, email, customer_name, doc_number)
+      VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [
+        movie_id,
+        room_id,
+        new Date(show_time),
+        JSON.stringify(seats),
+        email,
+        customer_name,
+        doc_number,
+      ]
     );
     const movieResult = await executeQuery(
       "SELECT title FROM `database-kata`.movies WHERE id = ?",
@@ -24,11 +39,21 @@ export const createReservation = async (req: Request, res: Response) => {
     );
     const movieTitle = (movieResult.results as any)[0]?.title || "Sin título";
     const roomName = (roomResult.results as any)[0]?.name || "Sin nombre";
-    sendEmail(email, movieTitle, roomName, show_time, JSON.stringify(seats));
+    sendEmail(
+      customer_name,
+      email,
+      movieTitle,
+      roomName,
+      show_time,
+      JSON.stringify(seats)
+    );
     const viewReserve = await executeQuery(
       "SELECT movie_id, room_id, show_time, seats FROM `database-kata`.reservations"
     );
-    console.log('Los datos de la reserva son los siguentes: ', viewReserve.results);
+    console.log(
+      "Los datos de la reserva son los siguentes: ",
+      viewReserve.results
+    );
     res.status(201).json({
       success: true,
       reservationId: (result.results as any).insertId,
@@ -36,5 +61,70 @@ export const createReservation = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error al crear reserva:", error);
     res.status(500).json({ success: false, error: "Error al crear reserva" });
+  }
+};
+
+export const getReservations = async (req: Request, res: Response) => {
+  try {
+    const result = await executeQuery(
+      `SELECT r.*, m.title AS movie_title, rm.name AS room_name
+       FROM \`database-kata\`.reservations r
+       JOIN \`database-kata\`.movies m ON r.movie_id = m.id
+       JOIN \`database-kata\`.rooms rm ON r.room_id = rm.id`
+    );
+    res.status(200).json(result.results);
+  } catch (error) {
+    console.error("Error al obtener reservas:", error);
+    res.status(500).json({ error: "Error al obtener reservas" });
+  }
+};
+
+export const updateReservation = async (req: Request, res: Response) => {
+  const {
+    movie_id,
+    room_id,
+    show_time,
+    seats,
+    id,
+    email,
+    customer_name,
+    doc_number,
+  } = req.body;
+  console.log("la Data que llega para actualizar la reserva es: ", req.body);
+  try {
+    await executeQuery(
+      `UPDATE \`database-kata\`.reservations
+        SET movie_id = ?, room_id = ?, show_time = ?, seats = ?, email = ?, customer_name = ?, doc_number = ?
+        WHERE id = ?`,
+      [
+        movie_id,
+        room_id,
+        show_time,
+        JSON.stringify(seats),
+        email,
+        customer_name,
+        doc_number,
+        id,
+      ]
+    );
+    res.status(200).json({ message: "Reserva actualizada exitosamente" });
+  } catch (error) {
+    console.error("Error al actualizar reserva:", error);
+    res.status(500).json({ error: "Error al actualizar reserva" });
+  }
+};
+
+export const deleteReservation = async (req: Request, res: Response) => {
+  const { id } = req.body;
+
+  try {
+    await executeQuery(
+      "DELETE FROM `database-kata`.reservations WHERE id = ?",
+      [id]
+    );
+    res.status(204).send();
+  } catch (error) {
+    console.error("Error al eliminar reserva:", error);
+    res.status(500).json({ error: "Error al eliminar reserva" });
   }
 };
