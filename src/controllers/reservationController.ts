@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { executeQuery } from "../config/db.js";
 import { sendEmail } from "../services/emailService.js";
+import { CreateReservationRequest, UpdateReservationRequest, DeleteReservationRequest } from "../models/reservation.js";
 
-export const createReservation = async (req: Request, res: Response) => {
+export const createReservation = async (
+  req: Request<{}, {}, CreateReservationRequest>,
+  res: Response
+) => {
   const {
     movie_id,
     room_id,
@@ -79,7 +83,10 @@ export const getReservations = async (req: Request, res: Response) => {
   }
 };
 
-export const updateReservation = async (req: Request, res: Response) => {
+export const updateReservation = async (
+  req: Request<{}, {}, UpdateReservationRequest>,
+  res: Response
+) => {
   const {
     movie_id,
     room_id,
@@ -114,9 +121,11 @@ export const updateReservation = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteReservation = async (req: Request, res: Response) => {
+export const deleteReservation = async (
+  req: Request<{}, {}, DeleteReservationRequest>,
+  res: Response
+) => {
   const { id } = req.body;
-
   try {
     await executeQuery(
       "DELETE FROM `database-kata`.reservations WHERE id = ?",

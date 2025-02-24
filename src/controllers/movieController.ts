@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { executeQuery } from "../config/db.js";
+import { CreateMovieRequest, UpdateMovieRequest, DeleteMovieRequest } from "../models/movie.js";
 
-export const registerMovie = async (req: Request, res: Response) => {
+export const registerMovie = async (
+  req: Request<{}, {}, CreateMovieRequest>,
+  res: Response
+) => {
   const { title, gender, duration, classification } = req.body;
   try {
     await executeQuery(
@@ -29,7 +33,10 @@ export const getMovies = async (req: Request, res: Response) => {
   }
 };
 
-export const updateMovie = async (req: Request, res: Response) => {
+export const updateMovie = async (
+  req: Request<{}, {}, UpdateMovieRequest>,
+  res: Response
+) => {
   const { title, gender, duration, classification, id } = req.body;
 
   try {
@@ -45,7 +52,10 @@ export const updateMovie = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteMovie = async (req: Request, res: Response) => {
+export const deleteMovie = async (
+  req: Request<{}, {}, DeleteMovieRequest>,
+  res: Response
+) => {
   const { id } = req.body;
 
   try {
@@ -53,8 +63,7 @@ export const deleteMovie = async (req: Request, res: Response) => {
       "DELETE FROM `database-kata`.movies WHERE id = ?",
       [id]
     );
-    console.log("La respuesta el aliminar la pelicual es: ", deleteResponse);
-
+    console.log("La respuesta al eliminar la película es: ", deleteResponse);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "Error al eliminar película" });
