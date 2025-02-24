@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { executeQuery } from "../config/db.js";
+import { CreateRoomRequest, UpdateRoomRequest, DeleteRoomRequest } from "../models/room.js";
 
-export const registerRoom = async (req: Request, res: Response) => {
+export const registerRoom = async (
+  req: Request<{}, {}, CreateRoomRequest>,
+  res: Response
+) => {
   const { name, capacity } = req.body;
   try {
     await executeQuery(
@@ -29,7 +33,10 @@ export const getRooms = async (req: Request, res: Response) => {
   }
 };
 
-export const updateRoom = async (req: Request, res: Response) => {
+export const updateRoom = async (
+  req: Request<{}, {}, UpdateRoomRequest>,
+  res: Response
+) => {
   const { name, capacity, id } = req.body;
 
   try {
@@ -45,14 +52,16 @@ export const updateRoom = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteRoom = async (req: Request, res: Response) => {
+export const deleteRoom = async (
+  req: Request<{}, {}, DeleteRoomRequest>,
+  res: Response
+) => {
   const { id } = req.body;
   try {
     const deleteResponse = await executeQuery(
       "DELETE FROM `database-kata`.rooms WHERE id = ?",
       [id]
     );
-    console.log("La respuesta el aliminar la sala es: ", deleteResponse);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "Error al eliminar sala" });
