@@ -17,8 +17,6 @@ export const createReservation = async (
     doc_number,
   } = req.body;
   try {
-    console.log(req.body);
-    console.log("El correo ingresado es: ", email);
     const result = await executeQuery(
       `INSERT INTO \`database-kata\`.reservations
       (movie_id, room_id, show_time, seats, email, customer_name, doc_number)
@@ -53,10 +51,6 @@ export const createReservation = async (
     );
     const viewReserve = await executeQuery(
       "SELECT movie_id, room_id, show_time, seats FROM `database-kata`.reservations"
-    );
-    console.log(
-      "Los datos de la reserva son los siguentes: ",
-      viewReserve.results
     );
     res.status(201).json({
       success: true,
@@ -97,7 +91,6 @@ export const updateReservation = async (
     customer_name,
     doc_number,
   } = req.body;
-  console.log("la Data que llega para actualizar la reserva es: ", req.body);
   try {
     await executeQuery(
       `UPDATE \`database-kata\`.reservations

@@ -62,7 +62,6 @@ export const deleteRoom = async (
       "DELETE FROM `database-kata`.rooms WHERE id = ?",
       [id]
     );
-    console.log("La respuesta el aliminar la sala es: ", deleteResponse);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "Error al eliminar sala" });

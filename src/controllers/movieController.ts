@@ -63,7 +63,6 @@ export const deleteMovie = async (
       "DELETE FROM `database-kata`.movies WHERE id = ?",
       [id]
     );
-    console.log("La respuesta al eliminar la película es: ", deleteResponse);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: "Error al eliminar película" });
